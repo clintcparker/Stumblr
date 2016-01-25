@@ -17,7 +17,7 @@ namespace Stumblr
         private const string YouLookBad = "You're not looking so good";
         private const string FarFromHome = "You're a long way from home!";
         private const string AlmostThere = "Keep going. You're almost there!";
-
+        private const int MaxAttempts = 10;
 
 
         public void StartAdventure()
@@ -29,17 +29,22 @@ namespace Stumblr
                 _Name = Console.ReadLine();
             }
 
+            PrintNameByLetter();
+
             //Main loop
-            do
+            for (var i=0;i<MaxAttempts;i++)
             {
                 Console.WriteLine("You're {0} blocks from home", _BlocksFromHome);
                 MentionDistance();
                 MentionHealth();
 
                 DoSomething();
+                if (_BlocksFromHome == 0 || _Health == 0)
+                {
+                    break;
+                }
             }
-            while (_BlocksFromHome > 0 && _Health > 0); //Maybe use a computed here?
-
+            
             //Success
             if (_BlocksFromHome == 0)
             {
@@ -50,20 +55,34 @@ namespace Stumblr
             //Failure
             if (_Health <= 0)
             {
-                Console.WriteLine("You're in no shape to be going anywhere. Take a nap and try tomorrow.");
+                Console.WriteLine("You're in no shape to be going anywhere.");
             }
 
             do
             {
                 Console.WriteLine("Press Q to quit");
             }
-            while (!Console.ReadLine().Equals("q", StringComparison.InvariantCultureIgnoreCase));
+            while (!Q_Entered());
+        }
+
+        private bool Q_Entered()
+        {
+            var readLine = Console.ReadLine();
+            return readLine != null && readLine.Equals("q", StringComparison.InvariantCultureIgnoreCase);
+        }
+
+        private void PrintNameByLetter()
+        {
+            foreach (var letter in _Name)
+            {
+                Console.WriteLine(letter);
+            }
         }
 
         private void MentionHealth()
         {
             string healthComment;
-            if (_Health > 10)
+            if (_Health >= 10)
             {
                 healthComment = YouLookGood;
             }
@@ -76,7 +95,7 @@ namespace Stumblr
 
         private void MentionDistance()
         {
-            var distanceComment = _BlocksFromHome > 10 ? FarFromHome : AlmostThere;
+            var distanceComment = _BlocksFromHome >= 10 ? FarFromHome : AlmostThere;
             Console.WriteLine(distanceComment);
         }
 
@@ -123,7 +142,7 @@ namespace Stumblr
                     _Health--;
                     Console.WriteLine("Ran from scary squirrel...and tripped");
                     break;
-                case 2:
+                default:
                     _BlocksFromHome++;
                     _Health--;
                     _Health--;
@@ -152,13 +171,14 @@ namespace Stumblr
                     _Health++;
                     Console.WriteLine("Found skateboard...made it 2 whole blocks!");
                     break;
-                case 3:
+                default:
                     _BlocksFromHome = 0;
                     _Health++;
                     Console.WriteLine("Free Uber and a Gatorade!");
                     break;
             }
         }
+
 
 
     }

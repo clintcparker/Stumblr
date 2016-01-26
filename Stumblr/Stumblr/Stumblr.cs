@@ -22,6 +22,9 @@ namespace Stumblr
 
         public void StartAdventure()
         {
+
+
+
             //Startup, we need a name
             while (String.IsNullOrWhiteSpace(_Name))
             {

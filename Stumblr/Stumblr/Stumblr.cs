@@ -19,6 +19,11 @@ namespace Stumblr
         private const string AlmostThere = "Keep going. You're almost there!";
         private const int MaxAttempts = 10;
 
+        public Stumblr()
+        {
+            Console.WriteLine("Let's get ready to stumble!!!!");
+        }
+
 
         public void StartAdventure()
         {
